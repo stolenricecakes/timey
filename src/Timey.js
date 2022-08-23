@@ -37,19 +37,21 @@ class Timey extends React.Component {
                 <TimeField timeChanged={(newVal) => this.timeTargetChanged(newVal)}  defaultValue={this.state.timeTarget} label="Target Work Time:"/>
               </div>
             </div>
-            {this.state.kaboom && (
-              <Fireworks
-                 options={{ opacity: 0.5}}
-                 style={{
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  position: 'fixed',
-                  background: 'rgba(255, 255, 255, 0)'
-                 }}
-               />
-            )}
+            <div className="fireworks-container">
+              {this.state.kaboom && (
+                <Fireworks
+                  options={{ opacity: 0.5}}
+                  style={{
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    position: 'fixed',
+                    background: 'rgba(255, 255, 255, 0)'
+                  }}
+                />
+              )}
+            </div>
           </div>
         );
     }
