@@ -4,7 +4,7 @@ import ToggleButton from './ToggleButton.js';
 import ResetButton from './ResetButton.js';
 import TimeField from "./TimeField.js";
 import Fireworks from "@fireworks-js/react";
-
+import timeCalcs from './functions/timeCalcs.js';
 import "./Timey.scss";
 
 class Timey extends React.Component {
@@ -24,7 +24,7 @@ class Timey extends React.Component {
             <div className="app-container">
 
               <div className="time-log-container">
-                  <TimeLog times={this.state.times} offsetValue={this.state.offsetValue} deleteRow={(idx) => this.deleteEntry(idx)} checkIfDone={(elapsed) => this.checkIfDone(elapsed)}/>
+                  <TimeLog times={this.state.times} offsetValue={this.state.offsetValue} deleteRow={(idx) => this.deleteEntry(idx)} />
 
                   <div className="button-container">
                     <ToggleButton working={this.state.working} onClick={() => this.toggleTime()}/>
@@ -54,6 +54,36 @@ class Timey extends React.Component {
         );
     }
 
+    componentDidMount() {
+      this.intervalID = setInterval(
+        () => this.timeTickin(), 1000
+      );
+    }
+
+    componentWillUnmount() {
+      clearInterval(this.intervalID);
+    }
+
+    timeTickin() {
+      const rightNow = new Date();
+      const times = this.state.times.slice();
+      if (times && times.length > 0) {
+        const curIdx = times.length - 1;
+        const currentTime = times[curIdx];
+        if (!currentTime.endTime) {
+          // have some updates to do.
+          currentTime.duration = timeCalcs.calculateDuration(currentTime.startTime, currentTime.endTime);
+          currentTime.cumulativeRaw = timeCalcs.calculateCumulative(curIdx, times, rightNow, this.state.offsetValue);
+          currentTime.cumulativeFmt = timeCalcs.formattedDiff(currentTime.cumulativeRaw / 1000);
+          this.checkIfDone(currentTime.cumulativeRaw);
+        } 
+      }
+
+      this.setState({
+        rightNow: rightNow,
+        times : times
+      });
+    }
 
     toggleTime() {
       const newState =  {
@@ -79,7 +109,7 @@ class Timey extends React.Component {
     }
 
     resetTime() {
-      this.setState({ times : [], working: false});
+      this.setState({ times : [], working: false, kaboom : false});
     }
 
     deleteEntry(idx) {
