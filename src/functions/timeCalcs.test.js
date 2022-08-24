@@ -141,3 +141,44 @@ test('calculateCumulative with an offset 1st complete (not continuation), 2nd co
     expect(cuml2).toEqual(5220000);
     expect(tc.formattedDiff(cuml2 / 1000)).toEqual("01:27:00");
 });
+
+test('calculateRemainingTime nothing worked, no target', () => {
+    const remainingTimeMs = tc.calculateRemainingTime(0, "00:00");
+    expect(remainingTimeMs).toEqual(0);
+});
+
+test('calculateRemainingTime nothing worked, 10 minute target', () => {
+    const remainingTimeMs = tc.calculateRemainingTime(0, "00:10");
+    expect(remainingTimeMs).toEqual(600000);
+    expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:10:00");
+});
+
+test('calculateRemainingTime 10 min worked, 10 minute target', () => {
+    const remainingTimeMs = tc.calculateRemainingTime(600000, "00:10");
+    expect(remainingTimeMs).toEqual(0);
+    expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:00:00");
+});
+
+test('calculateRemainingTime 20 min worked, 10 minute target', () => {
+    const remainingTimeMs = tc.calculateRemainingTime(1200000, "00:10");
+    expect(remainingTimeMs).toEqual(0);
+    expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:00:00");
+});
+test('calculateRemainingTime 1 hour worked, 30 minute target', () => {
+    const remainingTimeMs = tc.calculateRemainingTime(3600000, "00:30");
+    expect(remainingTimeMs).toEqual(0);
+    expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:00:00");
+});
+
+test('calculateRemainingTime 1 hour worked, 1 hour target', () => {
+    const remainingTimeMs = tc.calculateRemainingTime(3600000, "01:00");
+    expect(remainingTimeMs).toEqual(0);
+    expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:00:00");
+});
+
+test('calculateRemainingTime 1 hour worked, 1 hour, 1 minute target', () => {
+    const remainingTimeMs = tc.calculateRemainingTime(3600000, "01:01");
+    expect(remainingTimeMs).toEqual(60000);
+    expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:01:00");
+});
+

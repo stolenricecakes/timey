@@ -3,6 +3,8 @@ import TimeLog from './TimeLog.js';
 import ToggleButton from './ToggleButton.js';
 import ResetButton from './ResetButton.js';
 import TimeField from "./TimeField.js";
+import TimeRemaining from "./TimeRemaining.js";
+import EstimatedCompletion from "./EstimatedCompletion.js";
 import Fireworks from "@fireworks-js/react";
 import timeCalcs from './functions/timeCalcs.js';
 import "./Timey.scss";
@@ -35,6 +37,10 @@ class Timey extends React.Component {
               <div className="side-container">
                 <TimeField timeChanged={(newVal) => this.offsetChanged(newVal)}  defaultValue={this.state.offsetValue} label="Already Worked:"/>
                 <TimeField timeChanged={(newVal) => this.timeTargetChanged(newVal)}  defaultValue={this.state.timeTarget} label="Target Work Time:"/>
+
+                <TimeRemaining time={timeCalcs.formattedDiff(this.state.timeRemaining / 1000)} />
+
+                <EstimatedCompletion estTime={this.state.estCompletionTime} />
               </div>
             </div>
             <div className="fireworks-container">
@@ -67,30 +73,48 @@ class Timey extends React.Component {
     }
 
     timeTickin() {
+      // if you're not working, the tick doesn't really matter.
       const rightNow = new Date();
-      const times = this.state.times.slice();
-      if (times && times.length > 0) {
-        const curIdx = times.length - 1;
-        const currentTime = times[curIdx];
-        if (!currentTime.endTime) {
-          // have some updates to do.
-          currentTime.duration = timeCalcs.calculateDuration(currentTime.startTime, currentTime.endTime);
-          currentTime.cumulativeRaw = timeCalcs.calculateCumulative(curIdx, times, rightNow, this.state.offsetValue);
-          currentTime.cumulativeFmt = timeCalcs.formattedDiff(currentTime.cumulativeRaw / 1000);
-          this.checkIfDone(currentTime.cumulativeRaw);
-        } 
-      }
+      if (this.state.working) {
+        let timeRemaining = this.state.timeRemaining;
+        const times = this.state.times.slice();
+        if (times && times.length > 0) {
+          const curIdx = times.length - 1;
+          const currentTime = times[curIdx];
+          if (!currentTime.endTime) {
+            // have some updates to do.
+            currentTime.duration = timeCalcs.calculateDuration(currentTime.startTime, currentTime.endTime);
+            currentTime.cumulativeRaw = timeCalcs.calculateCumulative(curIdx, times, rightNow, this.state.offsetValue);
+            currentTime.cumulativeFmt = timeCalcs.formattedDiff(currentTime.cumulativeRaw / 1000);
+            this.checkIfDone(currentTime.cumulativeRaw);
+          }
 
-      this.setState({
-        rightNow: rightNow,
-        times : times
-      });
+          if (currentTime.cumulativeRaw) {
+            timeRemaining = timeCalcs.calculateRemainingTime(currentTime.cumulativeRaw, this.state.timeTarget);
+          }
+        }
+
+        this.setState({
+          rightNow: rightNow,
+          timeRemaining : timeRemaining,
+          times : times
+        });
+      }
+      else {
+        this.setState({
+          rightNow : rightNow,
+          estCompletionTime: this.estCompletionTime()
+        });
+      }
     }
 
     toggleTime() {
       const newState =  {
         times : this.state.times.slice(),
         working : this.state.working
+      }
+      if (newState.times.length === 0) {
+        newState.estCompletionTime = this.estCompletionTime();
       }
       if (newState.working) {
         newState.times[newState.times.length - 1].endTime = new Date();
@@ -111,7 +135,7 @@ class Timey extends React.Component {
     }
 
     resetTime() {
-      this.setState({ times : [], working: false, kaboom : false});
+      this.setState({ times : [], working: false, kaboom : false, estCompletionTime: ""});
     }
 
     deleteEntry(idx) {
@@ -121,7 +145,8 @@ class Timey extends React.Component {
 
     offsetChanged(newOffset) {
       if (this.legitTime(newOffset)) {
-         this.setState({offsetValue : newOffset})
+         this.setState({offsetValue : newOffset, 
+                        estCompletionTime: this.estCompletionTime()});
       }
       else {
         this.setState({offsetValue : ""})
@@ -130,10 +155,22 @@ class Timey extends React.Component {
 
     timeTargetChanged(newTime) {
       if (this.legitTime(newTime)) {
-         this.setState({timeTarget : newTime})
+         this.setState({timeTarget : newTime, 
+                        estCompletionTime: this.estCompletionTime()});
       }
       else {
         this.setState({timeTarget : ""})
+      }
+    }
+
+    estCompletionTime() {
+      if (this.state.rightNow && this.state.timeRemaining) {
+        return new Date(this.state.rightNow.getTime() + this.state.timeRemaining).toLocaleTimeString();
+      }
+      else {
+        const offsetStr = (this.state.offsetValue) ? this.state.offsetValue : "00:00";
+        const msTimeLeft = timeCalcs.subtractTimeStringsToMs(this.state.timeTarget, offsetStr);
+        return new Date(new Date().getTime() + msTimeLeft).toLocaleTimeString();
       }
     }
 

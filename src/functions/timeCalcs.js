@@ -91,3 +91,29 @@ exports.calculateSeconds = (diff) => {
     const mins = this.calculateMinutes(diff);
     return parseInt(diff - ((hours * 60 * 60) + (mins * 60))); 
 };
+
+exports.calculateRemainingTime = (timeWorkedMs, targetTime) => {
+    const splitTime = targetTime.split(":");
+    if (!splitTime || splitTime.length != 2) {
+        throw "bogus input.  expecting hh:mm";
+    }
+
+    const hoursInMs = parseInt(splitTime[0]) * 60 * 60 * 1000;
+    const minsInMs = parseInt(splitTime[1]) * 60 * 1000;
+    const targetMs = hoursInMs + minsInMs;
+
+    return Math.max(targetMs - timeWorkedMs, 0);
+};
+
+exports.subtractTimeStringsToMs = (timeString1, timeString2) => {
+    const split1 = timeString1.split(":");
+    const split2 = timeString2.split(":");
+
+    const ts1Ms = (parseInt(split1[0]) * 60 * 60 * 1000) + 
+                  (parseInt(split1[1]) * 60 * 1000);
+
+    const ts2Ms = (parseInt(split2[0]) * 60 * 60 * 1000) + 
+                  (parseInt(split2[1]) * 60 * 1000);
+
+    return ts1Ms - ts2Ms;
+}
