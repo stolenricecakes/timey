@@ -16,7 +16,10 @@ class Timey extends React.Component {
       this.state = {
         times: [],
         working: false,
-        timeTarget : "08:00"
+        offsetValue : "00:00",
+        timeTarget : "08:00",
+        timeRemaining : 0,
+        estCompletionTime : 0
       }
     }
     render() {
@@ -38,9 +41,13 @@ class Timey extends React.Component {
                 <TimeField timeChanged={(newVal) => this.offsetChanged(newVal)}  defaultValue={this.state.offsetValue} label="Already Worked:"/>
                 <TimeField timeChanged={(newVal) => this.timeTargetChanged(newVal)}  defaultValue={this.state.timeTarget} label="Target Work Time:"/>
 
-                <TimeRemaining time={timeCalcs.formattedDiff(this.state.timeRemaining / 1000)} />
+                {(this.state.times.length > 0) && (
+                  <div className="remaining-times-container">
+                    <TimeRemaining time={timeCalcs.formattedDiff(this.state.timeRemaining / 1000)} />
 
-                <EstimatedCompletion estTime={this.state.estCompletionTime} />
+                    <EstimatedCompletion estTime={this.state.estCompletionTime} />
+                  </div>
+                )}
               </div>
             </div>
             <div className="fireworks-container">
@@ -74,9 +81,13 @@ class Timey extends React.Component {
 
     timeTickin() {
       // if you're not working, the tick doesn't really matter.
+      if (this.state.kaboom) {
+        return;
+      }
       const rightNow = new Date();
       if (this.state.working) {
         let timeRemaining = this.state.timeRemaining;
+        let estCompletionTime = this.state.estCompletionTime;
         const times = this.state.times.slice();
         if (times && times.length > 0) {
           const curIdx = times.length - 1;
@@ -91,19 +102,21 @@ class Timey extends React.Component {
 
           if (currentTime.cumulativeRaw) {
             timeRemaining = timeCalcs.calculateRemainingTime(currentTime.cumulativeRaw, this.state.timeTarget);
+            estCompletionTime = timeCalcs.estCompletionTime(rightNow, timeRemaining);
           }
         }
 
         this.setState({
           rightNow: rightNow,
           timeRemaining : timeRemaining,
+          estCompletionTime : estCompletionTime,
           times : times
         });
       }
       else {
         this.setState({
           rightNow : rightNow,
-          estCompletionTime: this.estCompletionTime()
+          estCompletionTime: timeCalcs.estCompletionTime(rightNow, this.state.timeRemaining) 
         });
       }
     }
@@ -114,7 +127,7 @@ class Timey extends React.Component {
         working : this.state.working
       }
       if (newState.times.length === 0) {
-        newState.estCompletionTime = this.estCompletionTime();
+        newState.estCompletionTime = timeCalcs.initialEstCompletion(this.state.offsetValue, this.state.timeTarget);
       }
       if (newState.working) {
         newState.times[newState.times.length - 1].endTime = new Date();
@@ -144,9 +157,9 @@ class Timey extends React.Component {
     }
 
     offsetChanged(newOffset) {
+      console.log("offset changed to: " + newOffset);
       if (this.legitTime(newOffset)) {
-         this.setState({offsetValue : newOffset, 
-                        estCompletionTime: this.estCompletionTime()});
+         this.setState({offsetValue : newOffset});
       }
       else {
         this.setState({offsetValue : ""})
@@ -154,23 +167,12 @@ class Timey extends React.Component {
     }
 
     timeTargetChanged(newTime) {
+      console.log("time target changed to: " + newTime);
       if (this.legitTime(newTime)) {
-         this.setState({timeTarget : newTime, 
-                        estCompletionTime: this.estCompletionTime()});
+         this.setState({timeTarget : newTime});
       }
       else {
         this.setState({timeTarget : ""})
-      }
-    }
-
-    estCompletionTime() {
-      if (this.state.rightNow && this.state.timeRemaining) {
-        return new Date(this.state.rightNow.getTime() + this.state.timeRemaining).toLocaleTimeString();
-      }
-      else {
-        const offsetStr = (this.state.offsetValue) ? this.state.offsetValue : "00:00";
-        const msTimeLeft = timeCalcs.subtractTimeStringsToMs(this.state.timeTarget, offsetStr);
-        return new Date(new Date().getTime() + msTimeLeft).toLocaleTimeString();
       }
     }
 

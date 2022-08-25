@@ -94,7 +94,7 @@ exports.calculateSeconds = (diff) => {
 
 exports.calculateRemainingTime = (timeWorkedMs, targetTime) => {
     const splitTime = targetTime.split(":");
-    if (!splitTime || splitTime.length != 2) {
+    if (!splitTime || splitTime.length !== 2) {
         throw "bogus input.  expecting hh:mm";
     }
 
@@ -116,4 +116,20 @@ exports.subtractTimeStringsToMs = (timeString1, timeString2) => {
                   (parseInt(split2[1]) * 60 * 1000);
 
     return ts1Ms - ts2Ms;
-}
+};
+
+exports.initialEstCompletion = (offsetValue, timeTarget)  => {
+   const offsetStr = (offsetValue) ? offsetValue : "00:00";
+   const msTimeLeft = this.subtractTimeStringsToMs(timeTarget, offsetStr);
+    
+   return new Date(new Date().getTime() + msTimeLeft).toLocaleTimeString();
+};
+
+exports.estCompletionTime = (rightNow, timeRemainingMs) => {
+    if (rightNow && /\d+/.test(timeRemainingMs) ) {
+        return new Date(rightNow.getTime() + timeRemainingMs).toLocaleTimeString();
+    }
+    else {
+        return "💩";
+    }
+};

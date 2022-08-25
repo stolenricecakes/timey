@@ -1,5 +1,47 @@
 const tc = require('./timeCalcs.js');
 
+test('formatTime no args, empty string returned', () => {
+    const str = tc.formatTime();
+    expect(str).toEqual("");
+});
+
+test('formatTime formats hours and minutes', () => {
+    const someDate = new Date(1661433525655);
+    const dateStr = tc.formatTime(someDate);
+    expect(dateStr).toEqual("08:18");
+});
+
+test('calculateDuration no args, empty string', () => {
+    const str = tc.calculateDuration();
+    expect(str).toEqual("");
+});
+test('calculateDuration startTime right now, 00:00:00 diff', () => {
+    const rightNow = new Date();
+    const str = tc.calculateDuration(rightNow);
+    expect(str).toEqual("00:00:00");
+});
+
+test('calculateDuration startTime 2 minutes ago, 00:02:00 diff', () => {
+    const rightNow = new Date();
+    const twoMinutesAgo = new Date(rightNow.getTime() - (2 * 60 * 1000));
+    const str = tc.calculateDuration(twoMinutesAgo);
+    expect(str).toEqual("00:02:00");
+});
+
+test('calculateDuration startTime 2 hours, 4 minutes ago, 02:04:00 diff', () => {
+    const rightNow = new Date();
+    const twoHoursFourMinutesAgo = new Date(rightNow.getTime() - (4 * 60 * 1000) - (2 * 60 * 60 * 1000));
+    const str = tc.calculateDuration(twoHoursFourMinutesAgo);
+    expect(str).toEqual("02:04:00");
+});
+
+test('calculateDuration startTime, endTime 2 hours, 4 minutes ago, 02:04:00 diff', () => {
+    const rightNow = new Date();
+    const twoHoursFourMinutesAgo = new Date(rightNow.getTime() - (4 * 60 * 1000) - (2 * 60 * 60 * 1000));
+    const str = tc.calculateDuration(twoHoursFourMinutesAgo, rightNow);
+    expect(str).toEqual("02:04:00");
+});
+
 test('hours calculated correctly', () => {
 
     expect(tc.calculateHours(10)).toEqual(0);
@@ -147,6 +189,13 @@ test('calculateRemainingTime nothing worked, no target', () => {
     expect(remainingTimeMs).toEqual(0);
 });
 
+test('calculateRemainingTime bogus input, getError', () => {
+    expect(() => {tc.calculateRemainingTime(123, "farts")}).toThrow(/bogus input./);
+});
+test('calculateRemainingTime hh:mm:ss input, getError', () => {
+    expect(() => {tc.calculateRemainingTime(123, "11:22:33")}).toThrow(/bogus input./);
+});
+
 test('calculateRemainingTime nothing worked, 10 minute target', () => {
     const remainingTimeMs = tc.calculateRemainingTime(0, "00:10");
     expect(remainingTimeMs).toEqual(600000);
@@ -180,5 +229,53 @@ test('calculateRemainingTime 1 hour worked, 1 hour, 1 minute target', () => {
     const remainingTimeMs = tc.calculateRemainingTime(3600000, "01:01");
     expect(remainingTimeMs).toEqual(60000);
     expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:01:00");
+});
+
+test('initialEstCompletion empty offset default time target', () => {
+    const str = tc.initialEstCompletion(null, "08:00");
+    const nowish = new Date(new Date().getTime() + (8 * 60 * 60 * 1000));
+
+    expect(str).toEqual(nowish.toLocaleTimeString());
+});
+
+test('initialEstCompletion zero offset default time target', () => {
+    const str = tc.initialEstCompletion("00:00", "08:00");
+    const nowish = new Date(new Date().getTime() + (8 * 60 * 60 * 1000));
+
+    expect(str).toEqual(nowish.toLocaleTimeString());
+});
+
+test('initialEstCompletion 2 hour offset default time target', () => {
+    const str = tc.initialEstCompletion("02:00", "08:00");
+    const nowish = new Date(new Date().getTime() + (6 * 60 * 60 * 1000));
+
+    expect(str).toEqual(nowish.toLocaleTimeString());
+});
+
+
+test('estCompletionTime null right Now, get 💩', () => {
+    const str = tc.estCompletionTime();
+
+    expect(str).toEqual('💩');
+});
+
+test('estCompletionTime null timeRemaining, get 💩', () => {
+    const str = tc.estCompletionTime(new Date());
+
+    expect(str).toEqual('💩');
+});
+
+test('estCompletionTime zero time remaining, get right now.', () => {
+    const rightNow = new Date();
+    const str = tc.estCompletionTime(rightNow, 0);
+
+    expect(str).toEqual(rightNow.toLocaleTimeString());
+});
+
+test('estCompletionTime 20000 ms remaining, get correct time.', () => {
+    const rightNow = new Date();
+    const str = tc.estCompletionTime(rightNow, 20000);
+
+    expect(str).toEqual(new Date(rightNow.getTime() + 20000).toLocaleTimeString());
 });
 
