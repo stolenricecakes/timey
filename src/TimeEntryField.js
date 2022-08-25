@@ -1,6 +1,6 @@
 import React from "react";
 
-class TimeField extends React.Component {
+class TimeEntryField extends React.Component {
     constructor(props) {
         super(props);
         const timeState = {
@@ -121,4 +121,4 @@ class TimeField extends React.Component {
         );
     }
 }
-export default TimeField;
+export default TimeEntryField;

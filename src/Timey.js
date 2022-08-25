@@ -2,9 +2,8 @@ import React from "react";
 import TimeLog from './TimeLog.js';
 import ToggleButton from './ToggleButton.js';
 import ResetButton from './ResetButton.js';
-import TimeField from "./TimeField.js";
-import TimeRemaining from "./TimeRemaining.js";
-import EstimatedCompletion from "./EstimatedCompletion.js";
+import TimeEntryField from "./TimeEntryField.js";
+import TimeDisplayField from "./TimeDisplayField.js";
 import Fireworks from "@fireworks-js/react";
 import timeCalcs from './functions/timeCalcs.js';
 import "./Timey.scss";
@@ -38,14 +37,14 @@ class Timey extends React.Component {
               </div>
 
               <div className="side-container">
-                <TimeField timeChanged={(newVal) => this.offsetChanged(newVal)}  defaultValue={this.state.offsetValue} label="Already Worked:"/>
-                <TimeField timeChanged={(newVal) => this.timeTargetChanged(newVal)}  defaultValue={this.state.timeTarget} label="Target Work Time:"/>
+                <TimeEntryField timeChanged={(newVal) => this.offsetChanged(newVal)}  defaultValue={this.state.offsetValue} label="Already Worked:"/>
+                <TimeEntryField timeChanged={(newVal) => this.timeTargetChanged(newVal)}  defaultValue={this.state.timeTarget} label="Target Work Time:"/>
 
                 {(this.state.times.length > 0) && (
                   <div className="remaining-times-container">
-                    <TimeRemaining time={timeCalcs.formattedDiff(this.state.timeRemaining / 1000)} />
+                    <TimeDisplayField label="Time Remaining" time={timeCalcs.formattedDiff(this.state.timeRemaining / 1000)} />
 
-                    <EstimatedCompletion estTime={this.state.estCompletionTime} />
+                    <TimeDisplayField label="Estimated Completion Time" time={this.state.estCompletionTime} />
                   </div>
                 )}
               </div>

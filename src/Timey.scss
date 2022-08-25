@@ -61,10 +61,45 @@
 
             .time-container {
                 margin-bottom: 1rem;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
                 label {
                     margin-right: .5rem;
                     min-width: 140px;
                     display: inline-block;
+                }
+                .time-box-container {
+                    display: flex;
+                    flex-direction: row;
+                    align-items:center;
+                    border: 1px solid black;
+
+                    input {
+                        padding: 4px;
+                        width: 16px;
+                        border: 0;
+                        &:first-child {
+                            padding-right: 2px;
+                        }
+                        &:last-child {
+                            padding-left: 2px;
+                        }
+                    }   
+
+                    .colon {
+                        padding-bottom: 4px;
+                    }
+                }
+            }
+            .time-display-container {
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 1rem;
+
+                .value {
+                    margin-left: 1rem;
+                    font-size: 1.05rem;
                 }
             }
         }
