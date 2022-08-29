@@ -5,6 +5,7 @@ import ResetButton from './ResetButton.js';
 import TimeEntryField from "./TimeEntryField.js";
 import TimeDisplayField from "./TimeDisplayField.js";
 import Fireworks from "@fireworks-js/react";
+import {Octomonk} from "./functions/Octomonk.js";
 import timeCalcs from './functions/timeCalcs.js';
 import "./Timey.scss";
 
@@ -12,6 +13,7 @@ class Timey extends React.Component {
     constructor(props) {
       super(props);
       document.title = "Time-o Record-o";
+      this.octomonk = new Octomonk();
       this.state = {
         times: [],
         working: false,
@@ -72,6 +74,7 @@ class Timey extends React.Component {
       this.intervalID = setInterval(
         () => this.timeTickin(), 1000
       );
+      this.octomonk.init();
     }
 
     componentWillUnmount() {
@@ -143,6 +146,7 @@ class Timey extends React.Component {
         }
       }
       newState.working = !newState.working;
+      newState.working ? this.octomonk.gameOn() : this.octomonk.gameOff();
       this.setState(newState);
     }
 
@@ -187,6 +191,7 @@ class Timey extends React.Component {
 
         if (msElapsed > targetTime && !this.state.kaboom) {
           this.setState({kaboom : true});
+          this.octomonk.fireworks();
         }
       }
     }
