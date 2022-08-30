@@ -70,7 +70,7 @@ class TimeEntryField extends React.Component {
         }
         else {
             // allow for tab, backspace, delete and numbers.  if its not, cancel the event. 
-            if (event.keyCode !== 9 && event.keyCode !== 8 && event.keyCode !== 127 && (event.keyCode < 48 || event.keyCode > 57)) {
+            if (event.keyCode !== 9 && event.keyCode !== 8 && event.keyCode !== 127 && event.keyCode !== 37 && event.keyCode !== 39 && (event.keyCode < 48 || event.keyCode > 57)) {
                 event.preventDefault();
                 return false;
             }
@@ -99,11 +99,12 @@ class TimeEntryField extends React.Component {
     }
 
     padDigits(digit) {
-        if (digit < 10) {
-            return "0" + digit;
+        const parsed = parseInt(digit);
+        if (parsed < 10) {
+            return "0" + parsed;
         }
         else {
-            return "" + digit;
+            return "" + parsed;
         }
     }
 
