@@ -95,7 +95,7 @@ exports.calculateSeconds = (diff) => {
 exports.calculateRemainingTime = (timeWorkedMs, targetTime) => {
     const splitTime = targetTime.split(":");
     if (!splitTime || splitTime.length !== 2) {
-        throw "bogus input.  expecting hh:mm";
+        throw new Error("bogus input.  expecting hh:mm");
     }
 
     const hoursInMs = parseInt(splitTime[0]) * 60 * 60 * 1000;
