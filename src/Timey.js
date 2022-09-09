@@ -2,6 +2,7 @@ import React from "react";
 import TimeLog from './TimeLog.js';
 import ToggleButton from './ToggleButton.js';
 import ResetButton from './ResetButton.js';
+import Octobutton from './Octobutton.js';
 import TimeEntryField from "./TimeEntryField.js";
 import TimeDisplayField from "./TimeDisplayField.js";
 import Fireworks from "@fireworks-js/react";
@@ -20,7 +21,8 @@ class Timey extends React.Component {
         offsetValue : "00:00",
         timeTarget : "08:00",
         timeRemaining : 0,
-        estCompletionTime : 0
+        estCompletionTime : 0,
+        octoOn : false
       }
     }
     render() {
@@ -36,6 +38,7 @@ class Timey extends React.Component {
                     <ToggleButton working={this.state.working} onClick={() => this.toggleTime()}/>
                     <ResetButton onClick={() => this.resetTime()}/>
                   </div>
+                  <Octobutton onClick={() => this.octoToggle()} currentState={this.state.octoOn ? "on" : "off"}/>
               </div>
 
               <div className="side-container">
@@ -70,11 +73,21 @@ class Timey extends React.Component {
         );
     }
 
+    octoToggle() {
+       let octomonkOn = this.state.octoOn
+       if (!octomonkOn) {
+           this.octomonk.init();
+           this.setState({octoOn: true});
+       }
+       else {
+           this.setState({octoOn: false});
+       }
+    }
+
     componentDidMount() {
       this.intervalID = setInterval(
         () => this.timeTickin(), 1000
       );
-      this.octomonk.init();
     }
 
     componentWillUnmount() {

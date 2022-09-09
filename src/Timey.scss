@@ -49,6 +49,23 @@
                 button {
                     margin-right: 1rem;
                 }
+
+            }
+
+            #octobutton {
+                background-image: url(octomonk-trans-wt-bg.png);
+                width: 80px;
+                height: 85px;
+                background-size: cover;
+                background-position: bottom;
+                border: 0;
+                
+                &.on {
+                    background-color: green;
+                }
+                &.off {
+                    background-color: #9b9b9b;
+                }
             }
         }
 

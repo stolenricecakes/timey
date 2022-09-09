@@ -18,8 +18,10 @@ Usage:
 export class Octomonk {
 
     async init() {
-        this.serial = new BrowserSerial({baudRate:9600});
-        await this.serial.connect();
+        if (this.serial === undefined) {
+            this.serial = new BrowserSerial({baudRate:9600});
+            await this.serial.connect();
+        }
     }
 
     fireworks() {
