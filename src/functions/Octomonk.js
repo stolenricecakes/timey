@@ -25,14 +25,20 @@ export class Octomonk {
     }
 
     fireworks() {
-       this.serial.write("{\"command\":\"prod\",\"seconds\":120}\n");
+        if (this.serial !== undefined) {
+            this.serial.write("{\"command\":\"prod\",\"seconds\":120}\n");
+        }
     }
 
     gameOn() {
-       this.serial.write("{\"command\":\"passed\",\"seconds\":20}\n")
+        if (this.serial !== undefined) {
+            this.serial.write("{\"command\":\"passed\",\"seconds\":20}\n")
+        }
     }
 
     gameOff() {
-       this.serial.write("{\"command\":\"failed\",\"seconds\":10}\n")
+        if (this.serial !== undefined) {
+            this.serial.write("{\"command\":\"failed\",\"seconds\":10}\n")
+        }
     }
 }
