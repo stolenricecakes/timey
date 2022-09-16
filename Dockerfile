@@ -3,6 +3,7 @@ FROM node:16 as build-stage
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0 
 WORKDIR /app
 COPY package*.json /app/
+RUN npm config set strict-ssl false
 RUN npm install
 COPY ./ /app/
 RUN npm run build
