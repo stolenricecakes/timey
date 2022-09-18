@@ -1,14 +1,15 @@
 import React from "react";
-import TimeLog from './TimeLog.js';
-import ToggleButton from './ToggleButton.js';
-import ResetButton from './ResetButton.js';
-import Octobutton from './Octobutton.js';
-import TimeEntryField from "./TimeEntryField.js";
-import TimeDisplayField from "./TimeDisplayField.js";
+import TimeLog from '../TimeLog/TimeLog.js';
+import ToggleButton from '../Buttons/ToggleButton.js';
+import ResetButton from '../Buttons/ResetButton.js';
+import Octobutton from '../Buttons/Octobutton.js';
+import TimeEntryField from "../TimeFields/TimeEntryField.js";
+import TimeDisplayField from "../TimeFields/TimeDisplayField.js";
 import Fireworks from "@fireworks-js/react";
-import {Octomonk} from "./functions/Octomonk.js";
-import timeCalcs from './functions/timeCalcs.js';
-import "./Timey.scss";
+import {Octomonk} from "../../functions/Octomonk.js";
+import timeCalcs from '../../functions/timeCalcs.js';
+import logic from './logic.js';
+import "../../Timey.scss";
 
 class Timey extends React.Component {
     constructor(props) {
@@ -19,7 +20,7 @@ class Timey extends React.Component {
         times: [],
         working: false,
         offsetValue : "00:00",
-        timeTarget : "08:00",
+        timeTarget : "09:00",
         timeRemaining : 0,
         estCompletionTime : 0,
         octoOn : false
@@ -168,7 +169,7 @@ class Timey extends React.Component {
     }
 
     deleteEntry(idx) {
-      const newTimes = this.state.times.filter((val, i) => { return i !== idx; });
+      const newTimes = logic.deleteEntry(this.state.times.slice(), idx);
       this.setState ({times : newTimes });
     }
 

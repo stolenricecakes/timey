@@ -1,5 +1,5 @@
 import React from "react";
-import timeCalcs from "./functions/timeCalcs.js";
+import timeCalcs from "../../functions/timeCalcs.js";
 
 class TimeLog extends React.Component {
 /*    constructor(props) {
