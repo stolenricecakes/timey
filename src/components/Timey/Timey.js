@@ -7,7 +7,7 @@ import TimeEntryField from "../TimeFields/TimeEntryField.js";
 import TimeDisplayField from "../TimeFields/TimeDisplayField.js";
 import Fireworks from "@fireworks-js/react";
 import {Octomonk} from "../../functions/Octomonk.js";
-import timeCalcs from '../../functions/timeCalcs.js';
+import * as timeCalcs from '../../functions/timeCalcs.js';
 import logic from './logic.js';
 import "../../Timey.scss";
 
@@ -81,6 +81,7 @@ class Timey extends React.Component {
            this.setState({octoOn: true});
        }
        else {
+           this.octomonk.destroy();
            this.setState({octoOn: false});
        }
     }

@@ -1,29 +1,29 @@
 
 
-exports.formatTime = (date) => {
+const formatTime = (date) => {
     if (date) {
-        return this.padNumber(date.getHours()) + ":" + this.padNumber(date.getMinutes());
+        return padNumber(date.getHours()) + ":" + padNumber(date.getMinutes());
     }
     else {
         return "";
     }
 };
 
-exports.calculateDuration = (start, end) => {
+const calculateDuration = (start, end) => {
     if (start && end) {
         const startTime = start.getTime();
         let endTime = end.getTime();
         let diff = endTime - startTime;
         let diffSecs = diff / 1000;
 
-        return this.formattedDiff(diffSecs);
+        return formattedDiff(diffSecs);
     }
     else if (start) {
         const startTime = start.getTime();
         const endTime = new Date().getTime();
         const diff = (endTime - startTime) / 1000;
 
-        return this.formattedDiff(diff);
+        return formattedDiff(diff);
     }
     else {
         return "";
@@ -31,15 +31,15 @@ exports.calculateDuration = (start, end) => {
 };
 
 
-exports.formattedDiff = (diff) => {
-    const hours = this.padNumber(this.calculateHours(diff));
-    const mins = this.padNumber(this.calculateMinutes(diff));
-    const secs = this.padNumber(this.calculateSeconds(diff));
+const formattedDiff = (diff) => {
+    const hours = padNumber(calculateHours(diff));
+    const mins = padNumber(calculateMinutes(diff));
+    const secs = padNumber(calculateSeconds(diff));
 
     return hours + ":" + mins + ":" + secs;
 };
 
-exports.calculateCumulative = (idx, times, rightNow, offsetValue) => {
+const calculateCumulative = (idx, times, rightNow, offsetValue) => {
     let time = 0;
     let startTime = null;
     for (let i = 0; i < times.length && i <= idx; i++) {
@@ -68,7 +68,7 @@ exports.calculateCumulative = (idx, times, rightNow, offsetValue) => {
 };
 
 
-exports.padNumber = (num) => {
+const padNumber = (num) => {
     if (num < 10) {
         return "0" + num;
     }
@@ -77,22 +77,22 @@ exports.padNumber = (num) => {
     }
 };
 
-exports.calculateHours = (diff) => {
+const calculateHours = (diff) => {
     return parseInt(diff / (60 * 60));
 };
 
-exports.calculateMinutes = (diff) => {
-    const hours = this.calculateHours(diff);
+const calculateMinutes = (diff) => {
+    const hours = calculateHours(diff);
     return parseInt((diff - (hours * 60 * 60)) / 60); 
 };
 
-exports.calculateSeconds = (diff) => {
-    const hours = this.calculateHours(diff);
-    const mins = this.calculateMinutes(diff);
+const calculateSeconds = (diff) => {
+    const hours = calculateHours(diff);
+    const mins = calculateMinutes(diff);
     return parseInt(diff - ((hours * 60 * 60) + (mins * 60))); 
 };
 
-exports.calculateRemainingTime = (timeWorkedMs, targetTime) => {
+const calculateRemainingTime = (timeWorkedMs, targetTime) => {
     const splitTime = targetTime.split(":");
     if (!splitTime || splitTime.length !== 2) {
         throw new Error("bogus input.  expecting hh:mm");
@@ -105,7 +105,7 @@ exports.calculateRemainingTime = (timeWorkedMs, targetTime) => {
     return Math.max(targetMs - timeWorkedMs, 0);
 };
 
-exports.subtractTimeStringsToMs = (timeString1, timeString2) => {
+const subtractTimeStringsToMs = (timeString1, timeString2) => {
     const split1 = timeString1.split(":");
     const split2 = timeString2.split(":");
 
@@ -118,14 +118,14 @@ exports.subtractTimeStringsToMs = (timeString1, timeString2) => {
     return ts1Ms - ts2Ms;
 };
 
-exports.initialEstCompletion = (offsetValue, timeTarget)  => {
+const initialEstCompletion = (offsetValue, timeTarget)  => {
    const offsetStr = (offsetValue) ? offsetValue : "00:00";
-   const msTimeLeft = this.subtractTimeStringsToMs(timeTarget, offsetStr);
+   const msTimeLeft = subtractTimeStringsToMs(timeTarget, offsetStr);
     
    return new Date(new Date().getTime() + msTimeLeft).toLocaleTimeString();
 };
 
-exports.estCompletionTime = (rightNow, timeRemainingMs) => {
+const estCompletionTime = (rightNow, timeRemainingMs) => {
     if (rightNow && /\d+/.test(timeRemainingMs) ) {
         return new Date(rightNow.getTime() + timeRemainingMs).toLocaleTimeString();
     }
@@ -133,3 +133,5 @@ exports.estCompletionTime = (rightNow, timeRemainingMs) => {
         return "💩";
     }
 };
+
+export { formatTime, calculateDuration, padNumber, formattedDiff, calculateCumulative, calculateHours, calculateMinutes, calculateSeconds, calculateRemainingTime, subtractTimeStringsToMs, initialEstCompletion, estCompletionTime };
