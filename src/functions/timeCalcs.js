@@ -118,13 +118,6 @@ const subtractTimeStringsToMs = (timeString1, timeString2) => {
     return ts1Ms - ts2Ms;
 };
 
-const initialEstCompletion = (offsetValue, timeTarget)  => {
-   const offsetStr = (offsetValue) ? offsetValue : "00:00";
-   const msTimeLeft = subtractTimeStringsToMs(timeTarget, offsetStr);
-    
-   return new Date(new Date().getTime() + msTimeLeft).toLocaleTimeString();
-};
-
 const estCompletionTime = (rightNow, timeRemainingMs) => {
     if (rightNow && /\d+/.test(timeRemainingMs) ) {
         return new Date(rightNow.getTime() + timeRemainingMs).toLocaleTimeString();
@@ -134,4 +127,4 @@ const estCompletionTime = (rightNow, timeRemainingMs) => {
     }
 };
 
-export { formatTime, calculateDuration, padNumber, formattedDiff, calculateCumulative, calculateHours, calculateMinutes, calculateSeconds, calculateRemainingTime, subtractTimeStringsToMs, initialEstCompletion, estCompletionTime };
+export { formatTime, calculateDuration, padNumber, formattedDiff, calculateCumulative, calculateHours, calculateMinutes, calculateSeconds, calculateRemainingTime, subtractTimeStringsToMs, estCompletionTime };

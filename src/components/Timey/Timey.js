@@ -8,7 +8,7 @@ import TimeDisplayField from "../TimeFields/TimeDisplayField.js";
 import Fireworks from "@fireworks-js/react";
 import {Octomonk} from "../../functions/Octomonk.js";
 import * as timeCalcs from '../../functions/timeCalcs.js';
-import logic from './logic.js';
+import * as logic from './logic.js';
 import "../../Timey.scss";
 
 class Timey extends React.Component {
@@ -144,7 +144,7 @@ class Timey extends React.Component {
         working : this.state.working
       }
       if (newState.times.length === 0) {
-        newState.estCompletionTime = timeCalcs.initialEstCompletion(this.state.offsetValue, this.state.timeTarget);
+        newState.estCompletionTime = logic.initialEstCompletion(this.state.offsetValue, this.state.timeTarget);
       }
       if (newState.working) {
         newState.times[newState.times.length - 1].endTime = new Date();

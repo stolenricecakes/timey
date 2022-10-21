@@ -231,27 +231,6 @@ test('calculateRemainingTime 1 hour worked, 1 hour, 1 minute target', () => {
     expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:01:00");
 });
 
-test('initialEstCompletion empty offset default time target', () => {
-    const str = tc.initialEstCompletion(null, "08:00");
-    const nowish = new Date(new Date().getTime() + (8 * 60 * 60 * 1000));
-
-    expect(str).toEqual(nowish.toLocaleTimeString());
-});
-
-test('initialEstCompletion zero offset default time target', () => {
-    const str = tc.initialEstCompletion("00:00", "08:00");
-    const nowish = new Date(new Date().getTime() + (8 * 60 * 60 * 1000));
-
-    expect(str).toEqual(nowish.toLocaleTimeString());
-});
-
-test('initialEstCompletion 2 hour offset default time target', () => {
-    const str = tc.initialEstCompletion("02:00", "08:00");
-    const nowish = new Date(new Date().getTime() + (6 * 60 * 60 * 1000));
-
-    expect(str).toEqual(nowish.toLocaleTimeString());
-});
-
 
 test('estCompletionTime null right Now, get 💩', () => {
     const str = tc.estCompletionTime();
