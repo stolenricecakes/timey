@@ -1,13 +1,8 @@
 import React from "react";
-import timeCalcs from "./functions/timeCalcs.js";
+
+import {formatTime} from "../../functions/timeCalcs";
 
 class TimeLog extends React.Component {
-/*    constructor(props) {
-        super(props);
-        this.state = {
-            times : props.times
-        }
-    }*/
     render() {
         if (this.props && this.props.times && this.props.times.length > 0) {
             return this.renderTable();
@@ -39,8 +34,8 @@ class TimeLog extends React.Component {
                  {
                     this.props.times.map((row, idx) =>
                         <tr key={idx} className={row.continuation ? 'continuation' : ''}>
-                            <td>{timeCalcs.formatTime(row.startTime)}</td>
-                            <td>{timeCalcs.formatTime(row.endTime)}</td>
+                            <td>{formatTime(row.startTime)}</td>
+                            <td>{formatTime(row.endTime)}</td>
                             <td>{row.duration}</td>
                             <td>{row.cumulativeFmt}</td>
                             <td><button className="delete-entry" onClick={() => this.props.deleteRow(idx)}>X</button></td>

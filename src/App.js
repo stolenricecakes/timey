@@ -1,6 +1,6 @@
 //import logo from './logo.svg';
 //import './App.css';
-import Timey from './Timey.js';
+import Timey from './components/Timey/Timey.js';
 
 function App() {
   return (
