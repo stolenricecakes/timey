@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
+import * as logic from "./logic";
+jest.mock("./logic");
 
 import Timey from './Timey';
 
@@ -21,10 +23,20 @@ afterEach(() => {
 });
 
 test('when deleting a row, leave the one before it not marked as continuation.', () => {
-   const mockTimes = [
-    {startTime : new Date(), endTime : new Date(), continuation: true},
-    {startTime : new Date(), endTime : new Date(), continuation: true}
-   ]
+    logic.toggleWorkingState
+        .mockImplementationOnce(() => ({working:true, times: [{startTime : new Date(), continuation : false}]}))
+        .mockImplementationOnce(() => ({working:false, times: [{startTime : new Date(), endTime: new Date(), continuation : true}]}))
+        .mockImplementationOnce(() => ({working:true, times: [
+            {startTime : new Date(), endTime: new Date(), continuation : true},
+            {startTime : new Date(), continuation : false}
+        ]}))
+        .mockImplementationOnce(() => ({working:false, times: [
+            {startTime : new Date(), endTime: new Date(), continuation : true},
+            {startTime : new Date(), endTime: new Date(), continuation : true}
+        ]}));
+
+    logic.deleteEntry
+        .mockImplementationOnce(() => ({times: [{startTime: new Date(), endTime: new Date(), continuation: false}]}))
 
    act(() => {
     render(<Timey />, container);
@@ -56,7 +68,7 @@ test('when deleting a row, leave the one before it not marked as continuation.',
   });
 
   const tableRows = document.querySelectorAll(".time-log-container table tbody tr");
-  expect(tableRows.length).toEqual(1);
+  expect(tableRows.values().next().done).toEqual(true);
 
   //const tableRowsContinuations = document.querySelectorAll(".time-log-container table tbody tr.continuation");
   //expect(tableRows.length).toEqual(0);
