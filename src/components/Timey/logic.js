@@ -18,6 +18,7 @@ const initialEstCompletion = (offsetValue, timeTarget)  => {
 
 const workingTimeTick = (rightNow, timeRemaining, estCompTime, times, offsetValue, timeTarget, kaboom) => {
     let doneState = {};
+    let overage = {};
     if (times && times.length > 0) {
         const curIdx = times.length - 1;
         const currentTime = times[curIdx];
@@ -30,13 +31,21 @@ const workingTimeTick = (rightNow, timeRemaining, estCompTime, times, offsetValu
         }
 
         if (currentTime.cumulativeRaw) {
-            timeRemaining = calculateRemainingTime(currentTime.cumulativeRaw, timeTarget);
-            estCompTime = estCompletionTime(rightNow, timeRemaining);
+            const timeDifference = calculateRemainingTime(currentTime.cumulativeRaw, timeTarget);
+            if (timeDifference >= 0) {
+                timeRemaining = timeDifference;
+                estCompTime = estCompletionTime(rightNow, timeRemaining);
+            }
+            else {
+                timeRemaining = 0;
+                overage = { overage : timeDifference };
+            }
         }
     }
 
     return {
         ...doneState,
+        ...overage,
         rightNow : rightNow,
         timeRemaining : timeRemaining,
         estCompletionTime : estCompTime,
@@ -144,7 +153,7 @@ const calculateRemainingTime = (timeWorkedMs, targetTime) => {
     const minsInMs = parseInt(splitTime[1]) * 60 * 1000;
     const targetMs = hoursInMs + minsInMs;
 
-    return Math.max(targetMs - timeWorkedMs, 0);
+    return targetMs - timeWorkedMs;
 };
 
 const estCompletionTime = (rightNow, timeRemainingMs) => {

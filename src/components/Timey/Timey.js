@@ -51,6 +51,10 @@ class Timey extends React.Component {
                     <TimeDisplayField label="Time Remaining" time={timeCalcs.formattedDiff(this.state.timeRemaining / 1000)} />
 
                     <TimeDisplayField label="Estimated Completion Time" time={this.state.estCompletionTime} />
+
+                      {this.state.overage && (
+                          <TimeDisplayField label="Overage" time={timeCalcs.formattedDiff(this.state.overage / -1000)} />
+                      )}
                   </div>
                 )}
               </div>
@@ -97,23 +101,22 @@ class Timey extends React.Component {
     }
 
     timeTickin() {
-      // if you're not working, the tick doesn't really matter.
-      if (this.state.kaboom) {
-        return;
-      }
       const rightNow = new Date();
       if (this.state.working) {
         const stateUpdates = logic.workingTimeTick(rightNow, this.state.timeRemaining, this.state.estCompletionTime, this.state.times, this.state.offsetValue, this.state.timeTarget, this.state.kaboom);
-        if (stateUpdates.kaboom) {
+        if (stateUpdates.kaboom && !this.state.kaboom) {
             this.octomonk.fireworks();
         }
         this.setState(stateUpdates);
       }
-      else {
+      else if (!this.state.kaboom) {
         this.setState({
           rightNow : rightNow,
           estCompletionTime: logic.estCompletionTime(rightNow, this.state.timeRemaining)
         });
+      }
+      else {
+          this.setState({rightNow : rightNow});
       }
     }
 
