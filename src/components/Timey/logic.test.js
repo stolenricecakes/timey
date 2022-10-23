@@ -208,13 +208,11 @@ describe("logic used for Timey component", () => {
 
     test('calculateRemainingTime 20 min worked, 10 minute target', () => {
         const remainingTimeMs = logic.calculateRemainingTime(1200000, "00:10");
-        expect(remainingTimeMs).toEqual(0);
-        expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:00:00");
+        expect(remainingTimeMs).toEqual(-(1000 * 60 * 10));
     });
     test('calculateRemainingTime 1 hour worked, 30 minute target', () => {
         const remainingTimeMs = logic.calculateRemainingTime(3600000, "00:30");
-        expect(remainingTimeMs).toEqual(0);
-        expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:00:00");
+        expect(remainingTimeMs).toEqual((-1000 * 60 * 30));
     });
 
     test('calculateRemainingTime 1 hour worked, 1 hour target', () => {
