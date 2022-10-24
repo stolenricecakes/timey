@@ -24,6 +24,7 @@ class Timey extends React.Component {
         timeRemaining : 0,
         estCompletionTime : 0,
         offsetRefresher : 0,
+        messageIdx: Math.floor(Math.random() * 5.0),
         octoOn : false
       }
     }
@@ -37,7 +38,7 @@ class Timey extends React.Component {
                   <TimeLog times={this.state.times} offsetValue={this.state.offsetValue} deleteRow={(idx) => this.deleteEntry(idx)} />
 
                   <div className="button-container">
-                    <ToggleButton working={this.state.working} onClick={() => this.toggleTime()}/>
+                    <ToggleButton working={this.state.working} onClick={() => this.toggleTime()} messageIdx={this.state.messageIdx}/>
                     <ResetButton onClick={() => this.resetTime()}/>
                   </div>
                   <Octobutton onClick={() => this.octoToggle()} currentState={this.state.octoOn ? "on" : "off"}/>
@@ -123,6 +124,7 @@ class Timey extends React.Component {
 
     toggleTime() {
       const newState = logic.toggleWorkingState(this.state.times.slice(), this.state.working, this.state.offsetValue, this.state.timeTarget);
+      newState.messageIdx = Math.floor(Math.random() * 5.0);
       newState.working
           ? (newState.startedContinuation
              ? this.octomonk.fireworks()
