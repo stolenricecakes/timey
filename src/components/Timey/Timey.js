@@ -23,6 +23,7 @@ class Timey extends React.Component {
         timeTarget : "09:00",
         timeRemaining : 0,
         estCompletionTime : 0,
+        offsetRefresher : 0,
         octoOn : false
       }
     }
@@ -43,7 +44,7 @@ class Timey extends React.Component {
               </div>
 
               <div className="side-container">
-                <TimeEntryField timeChanged={(newVal) => this.offsetChanged(newVal)}  defaultValue={this.state.offsetValue} label="Already Worked:"/>
+                <TimeEntryField key={this.state.offsetRefresher} timeChanged={(newVal) => this.offsetChanged(newVal)}  defaultValue={this.state.offsetValue} label="Already Worked:"/>
                 <TimeEntryField timeChanged={(newVal) => this.timeTargetChanged(newVal)}  defaultValue={this.state.timeTarget} label="Target Work Time:"/>
 
                 {(this.state.times.length > 0) && (
@@ -132,7 +133,12 @@ class Timey extends React.Component {
     }
 
     resetTime() {
-      this.setState({ times : [], working: false, kaboom : false, estCompletionTime: ""});
+        if (this.state.overage) {
+            const hhmmssOverageAry = timeCalcs.formattedDiff(this.state.overage / -1000).split(":");
+            this.offsetChanged(hhmmssOverageAry[0] + ":" + hhmmssOverageAry[1]);
+            this.setState({offsetRefresher: this.state.offsetRefresher + 1});
+        }
+      this.setState({ times : [], working: false, kaboom : false, estCompletionTime: "", overage: undefined});
     }
 
     deleteEntry(idx) {
