@@ -46,7 +46,6 @@ const workingTimeTick = (rightNow, timeRemaining, estCompTime, times, offsetValu
     return {
         ...doneState,
         ...overage,
-        rightNow : rightNow,
         timeRemaining : timeRemaining,
         estCompletionTime : estCompTime,
         times : times
