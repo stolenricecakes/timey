@@ -38,6 +38,7 @@ test('when deleting a row, leave the one before it not marked as continuation.',
     logic.deleteEntry
         .mockImplementationOnce(() => ({times: [{startTime: new Date(), endTime: new Date(), continuation: false}]}))
 
+    logic.workingTimeTick.mockReturnValue({times: []});
    act(() => {
     render(<Timey />, container);
    });
