@@ -43,4 +43,16 @@ export class Octomonk {
             this.serial.write("{\"command\":\"failed\",\"seconds\":10}\n")
         }
     }
+
+    danger() {
+        if (this.serial !== undefined) {
+            this.serial.write("{\"command\":\"beep-on\"}\n")
+        }
+    }
+
+    noDanger() {
+        if (this.serial !== undefined) {
+            this.serial.write("{\"command\":\"beep-off\"}\n")
+        }
+    }
 }

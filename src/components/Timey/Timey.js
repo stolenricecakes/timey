@@ -26,6 +26,7 @@ const Timey = (props) => {
     const [rightNow, setRightNow] = useState(new Date());
     const [overage, setOverage] = useState();
     const [octoOn, setOctoOn] = useState(false);
+    const [dangerZone, setDangerZone] = useState(false);
 
     const octoToggle = () => {
        if (!octoOn) {
@@ -49,11 +50,21 @@ const Timey = (props) => {
         setEstCompletionTime(stateUpdates.estCompletionTime);
         setTimes(stateUpdates.times);
         setOverage(stateUpdates.overage);
+        setDangerZone(false);
       }
       else if (!kaboom) {
         setEstCompletionTime(logic.estCompletionTime(rightNow, timeRemaining));
+        const dangerRightNow = logic.inDangerZone(times, rightNow);
+        if (dangerRightNow && !dangerZone) {
+            octomonk.danger();
+            setDangerZone(true);
+        }
+        else if (!dangerRightNow) {
+            octomonk.noDanger();
+            setDangerZone(false);
+        }
       }
-    },[working, rightNow, timeRemaining, estCompletionTime, times, offsetValue, timeTarget, kaboom]);
+    },[working, rightNow, timeRemaining, estCompletionTime, times, offsetValue, timeTarget, kaboom, dangerZone]);
 
     useEffect(() => {
        document.title = "Time-o Record-o";

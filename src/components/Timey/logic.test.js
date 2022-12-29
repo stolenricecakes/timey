@@ -253,4 +253,81 @@ describe("logic used for Timey component", () => {
 
         expect(str).toEqual(new Date(rightNow.getTime() + 20000).toLocaleTimeString());
     });
+
+    test('inDangerZone is false if there are no times yet', () => {
+        const result = logic.inDangerZone([], new Date());
+        expect(result).toEqual(false);
+    });
+
+    test('inDangerZone is false if stop is 1 minute ago', () => {
+        const rightNow = new Date();
+        const times = [{
+           startTime : new Date(rightNow.getTime() - 120000),
+           endTime : new Date(rightNow.getTime() - 60000),
+           continuation : false
+        }];
+        const result = logic.inDangerZone(times, rightNow);
+
+        expect(result).toEqual(false);
+    });
+
+    test('inDangerZone is false if stop is 13 minutes ago', () => {
+        const rightNow = new Date();
+        const times = [{
+           startTime : new Date(rightNow.getTime() - 12000000),
+           endTime : new Date(rightNow.getTime() - 13*60000),
+           continuation : false
+        }];
+        const result = logic.inDangerZone(times, rightNow);
+
+        expect(result).toEqual(false);
+    });
+
+    test('inDangerZone is true if stop is 14 minutes ago', () => {
+        const rightNow = new Date();
+        const times = [{
+           startTime : new Date(rightNow.getTime() - 12000000),
+           endTime : new Date(rightNow.getTime() - 14*60000),
+           continuation : false
+        }];
+        const result = logic.inDangerZone(times, rightNow);
+
+        expect(result).toEqual(true);
+    });
+
+    test('inDangerZone is true if stop is 14 minutes and a few seconds ago', () => {
+        const rightNow = new Date();
+        const times = [{
+           startTime : new Date(rightNow.getTime() - 12000000),
+           endTime : new Date(rightNow.getTime() - (14*60000) - 8000),
+           continuation : false
+        }];
+        const result = logic.inDangerZone(times, rightNow);
+
+        expect(result).toEqual(true);
+    });
+
+    test('inDangerZone is false if stop is 15 minutes ago', () => {
+        const rightNow = new Date();
+        const times = [{
+           startTime : new Date(rightNow.getTime() - 12000000),
+           endTime : new Date(rightNow.getTime() - 15*60000),
+           continuation : false
+        }];
+        const result = logic.inDangerZone(times, rightNow);
+
+        expect(result).toEqual(false);
+    });
+
+    test('inDangerZone is false if stop is 16 minutes ago', () => {
+        const rightNow = new Date();
+        const times = [{
+           startTime : new Date(rightNow.getTime() - 12000000),
+           endTime : new Date(rightNow.getTime() - 16*60000),
+           continuation : false
+        }];
+        const result = logic.inDangerZone(times, rightNow);
+
+        expect(result).toEqual(false);
+    });
 });

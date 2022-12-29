@@ -164,4 +164,18 @@ const estCompletionTime = (rightNow, timeRemainingMs) => {
     }
 };
 
-export { initialEstCompletion, deleteEntry, workingTimeTick, toggleWorkingState,  calculateDuration, calculateCumulative, calculateRemainingTime, estCompletionTime}
+// assumed this will only be called when not working.
+const inDangerZone = (times, rightNow) => {
+   if (times && times.length > 0) {
+      const lastTime = times[times.length - 1];
+      const fifteenMinutesMs = 15 * 60 * 1000;
+      const fourteenMinutesMs = 14 * 60 * 1000;
+      const diff = rightNow.getTime() - lastTime.endTime.getTime();
+      return diff >= fourteenMinutesMs && diff < fifteenMinutesMs;
+   }
+   else {
+       return false;
+   }
+};
+
+export { initialEstCompletion, deleteEntry, workingTimeTick, toggleWorkingState,  calculateDuration, calculateCumulative, calculateRemainingTime, estCompletionTime, inDangerZone};
