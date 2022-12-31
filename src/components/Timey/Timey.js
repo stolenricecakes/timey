@@ -137,7 +137,7 @@ const Timey = (props) => {
     }
 
     return (
-        <div className="main-container">
+        <div className={dangerZone ? 'alert main-container' :'main-container'}>
             <div className="banner">Howdy!  record your time here and stuff</div>
             <div className="app-container">
 

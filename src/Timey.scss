@@ -1,20 +1,19 @@
 @import "alert";
 
-#root {
+
+.main-container {
+    padding: 1rem;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
     &.alert {
         animation-name: bonkers;
         animation-delay: 1s;
         animation-duration: 10s;
         animation-iteration-count: 5;
     }
-
-    height: 100vh;
-}
-.main-container {
-    padding-top: 1rem;
-    margin: 0 1rem;
-    display: flex;
-    flex-direction: column;
 
     .banner {
         font-size: 1.3rem;
