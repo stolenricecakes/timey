@@ -1,0 +1,8 @@
+@keyframes bonkers {
+  @for $i from 0 through 99 {
+    #{$i}% {
+      background-color: rgb(random(255), random(255), random(255));
+    }
+  }
+  100% { background-color: white; }
+}
