@@ -23,6 +23,7 @@ export class Octomonk {
     }
 
     destroy() {
+        this.serial.disconnect();
         delete this.serial;
     }
 
