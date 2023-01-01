@@ -1,8 +1,10 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, {useState, useEffect, useCallback, useContext} from "react";
+import {DarkModeContext} from "../DarkModeContext";
 import TimeLog from '../TimeLog/TimeLog.js';
 import ToggleButton from '../Buttons/ToggleButton.js';
 import ResetButton from '../Buttons/ResetButton.js';
 import Octobutton from '../Buttons/Octobutton.js';
+import Lightswitch from '../Buttons/Lightswitch.js';
 import TimeEntryField from "../TimeFields/TimeEntryField.js";
 import TimeDisplayField from "../TimeFields/TimeDisplayField.js";
 import Fireworks from "@fireworks-js/react";
@@ -27,6 +29,7 @@ const Timey = (props) => {
     const [overage, setOverage] = useState();
     const [octoOn, setOctoOn] = useState(false);
     const [dangerZone, setDangerZone] = useState(false);
+    const { darkMode } = useContext(DarkModeContext);
 
     const octoToggle = () => {
        if (!octoOn) {
@@ -136,8 +139,19 @@ const Timey = (props) => {
       return /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(str);
     }
 
+    const getClassName = () => {
+        let className = 'main-container';
+        if (dangerZone) {
+            className += " alert";
+        }
+        if (darkMode) {
+            className += " dark-mode"
+        }
+        return className;
+    }
+
     return (
-        <div className={dangerZone ? 'alert main-container' :'main-container'}>
+        <div className={getClassName()}>
             <div className="banner">Howdy!  record your time here and stuff</div>
             <div className="app-container">
 
@@ -149,6 +163,7 @@ const Timey = (props) => {
                         <ResetButton onClick={() => resetTime()}/>
                     </div>
                     <Octobutton onClick={() => octoToggle()} currentState={octoOn ? "on" : "off"}/>
+                    <Lightswitch/>
                 </div>
 
                 <div className="side-container">

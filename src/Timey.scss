@@ -1,5 +1,5 @@
 @import "alert";
-
+@import "dark-mode";
 
 .main-container {
     padding: 1rem;
@@ -79,6 +79,7 @@
                     background-color: #9b9b9b;
                 }
             }
+            @import "Lightswitch";
         }
 
         .side-container {

@@ -168,10 +168,11 @@ const estCompletionTime = (rightNow, timeRemainingMs) => {
 const inDangerZone = (times, rightNow) => {
    if (times && times.length > 0) {
       const lastTime = times[times.length - 1];
-      const fifteenMinutesMs = 15 * 60 * 1000;
-      const fourteenMinutesMs = 14 * 60 * 1000;
+      //const fifteenMinutesMs = 15 * 60 * 1000;
+      //const fourteenMinutesMs = 14 * 60 * 1000;
       const diff = rightNow.getTime() - lastTime.endTime.getTime();
-      return diff >= fourteenMinutesMs && diff < fifteenMinutesMs;
+      //return diff >= fourteenMinutesMs && diff < fifteenMinutesMs;
+     return diff >= 30000;
    }
    else {
        return false;
