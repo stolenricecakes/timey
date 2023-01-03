@@ -116,7 +116,6 @@ const Timey = (props) => {
     }
 
     const offsetChanged = (newOffset) => {
-      console.log("offset changed to: " + newOffset);
       if (legitTime(newOffset)) {
          setOffsetValue(newOffset);
       }
@@ -126,7 +125,6 @@ const Timey = (props) => {
     }
 
     const timeTargetChanged = (newTime) => {
-      console.log("time target changed to: " + newTime);
       if (legitTime(newTime)) {
          setTimeTarget(newTime);
       }

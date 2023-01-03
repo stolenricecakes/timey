@@ -65,18 +65,18 @@
             }
 
             #octobutton {
-                background-image: url(octomonk-trans-wt-bg.png);
                 width: 80px;
                 height: 85px;
                 background-size: cover;
                 background-position: bottom;
+                background-color: rgba(255, 255, 255, 0);
                 border: 0;
                 
                 &.on {
-                    background-color: green;
+                    background-image: url(octomonk-trans-on.png);
                 }
                 &.off {
-                    background-color: #9b9b9b;
+                    background-image: url(octomonk-trans-off.png);
                 }
             }
             @import "Lightswitch";
