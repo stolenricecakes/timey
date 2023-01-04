@@ -46,14 +46,18 @@ export class Octomonk {
     }
 
     danger() {
+        console.log("holy tinkles, telling octomonk there's danger");
         if (this.serial !== undefined) {
             this.serial.write("{\"command\":\"beep-on\"}\n")
+            console.log("I done warned octomonk, yo.");
         }
     }
 
     noDanger() {
+        console.log("telling octomonk to chill out.");
         if (this.serial !== undefined) {
             this.serial.write("{\"command\":\"beep-off\"}\n")
+            console.log("I done calmed octomonk down.");
         }
     }
 }

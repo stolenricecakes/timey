@@ -1,6 +1,50 @@
+@use "sass:color";
+
+$dark_bg : #030303;
+$dark_bg_lighter : color.scale($dark_bg, $lightness: 15%);
+$dark_fg : #dfdfdf;
+$dark_fg_darker : color.scale($dark_fg, $lightness: -15%);
+
 .main-container {
   &.dark-mode {
-    background-color: #030303;
-    color: #dfdfdf;
+    background-color: $dark_bg;
+    color: $dark_fg;
+
+    button {
+      border-color: $dark_fg_darker;
+      color: $dark_fg;
+      background-color: $dark_bg_lighter;
+    }
+
+    .app-container {
+      .time-log-container {
+        table {
+          tr {
+            th {
+              background-color: $dark_bg_lighter;
+              color: $dark_fg_darker;
+            }
+            * {
+              border-color: $dark_fg_darker;
+
+              &:last-child {
+                border-color: $dark_fg_darker;
+              }
+            }
+          }
+        }
+      }
+      .side-container {
+        .time-container {
+          .time-box-container {
+            border-color: $dark_fg_darker;
+            .colon {
+              color: black;
+              background-color: white;
+            }
+          }
+        }
+      }
+    }
   }
 }
