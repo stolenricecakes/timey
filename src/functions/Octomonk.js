@@ -29,31 +29,35 @@ export class Octomonk {
 
     fireworks() {
         if (this.serial !== undefined) {
-            this.serial.write("{\"command\":\"prod\",\"seconds\":120}\n");
+            this.serial.write("{\"command\":\"prod\",\"seconds\":120}");
         }
     }
 
     gameOn() {
         if (this.serial !== undefined) {
-            this.serial.write("{\"command\":\"passed\",\"seconds\":20}\n")
+            this.serial.write("{\"command\":\"passed\",\"seconds\":20}")
         }
     }
 
     gameOff() {
         if (this.serial !== undefined) {
-            this.serial.write("{\"command\":\"failed\",\"seconds\":10}\n")
+            this.serial.write("{\"command\":\"failed\",\"seconds\":10}")
         }
     }
 
     danger() {
+        console.log("holy tinkles, telling octomonk there's danger");
         if (this.serial !== undefined) {
-            this.serial.write("{\"command\":\"beep-on\"}\n")
+            this.serial.write("{\"command\":\"beep-on\"}")
+            console.log("I done warned octomonk, yo.");
         }
     }
 
     noDanger() {
+        console.log("telling octomonk to chill out.");
         if (this.serial !== undefined) {
-            this.serial.write("{\"command\":\"beep-off\"}\n")
+            this.serial.write("{\"command\":\"beep-off\"}")
+            console.log("I done calmed octomonk down.");
         }
     }
 }

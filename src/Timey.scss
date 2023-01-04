@@ -1,5 +1,5 @@
 @import "alert";
-
+@import "dark-mode";
 
 .main-container {
     padding: 1rem;
@@ -17,7 +17,12 @@
 
     .banner {
         font-size: 1.3rem;
+    }
 
+    button {
+       padding: .25rem .5rem;
+       border-radius: 4px;
+       border: 1px solid black;
     }
 
     .app-container {
@@ -65,20 +70,21 @@
             }
 
             #octobutton {
-                background-image: url(octomonk-trans-wt-bg.png);
                 width: 80px;
                 height: 85px;
                 background-size: cover;
                 background-position: bottom;
+                background-color: rgba(255, 255, 255, 0);
                 border: 0;
                 
                 &.on {
-                    background-color: green;
+                    background-image: url(octomonk-trans-on.png);
                 }
                 &.off {
-                    background-color: #9b9b9b;
+                    background-image: url(octomonk-trans-off.png);
                 }
             }
+            @import "Lightswitch";
         }
 
         .side-container {

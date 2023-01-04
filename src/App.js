@@ -1,10 +1,11 @@
-//import logo from './logo.svg';
-//import './App.css';
 import Timey from './components/Timey/Timey.js';
+import {DarkModeProvider} from "./components/DarkModeContext";
 
 function App() {
   return (
-    <Timey/>
+      <DarkModeProvider>
+        <Timey/>
+      </DarkModeProvider>
   );
 }
 

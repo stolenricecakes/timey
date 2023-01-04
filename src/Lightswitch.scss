@@ -1,0 +1,14 @@
+.lightswitch {
+  margin-top: 2rem;
+  width: 40px;
+  height: 55px;
+  background-size: cover;
+  background-position: bottom;
+  border: 0;
+  &.on {
+    background-image: url(switch-on.png);
+  }
+  &.off {
+    background-image: url(switch-off.png);
+  }
+}

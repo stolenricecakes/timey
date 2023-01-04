@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
+import {DarkModeProvider} from "../DarkModeContext";
 import * as logic from "./logic";
 jest.mock("./logic");
 
@@ -40,7 +41,7 @@ test('when deleting a row, leave the one before it not marked as continuation.',
 
     logic.workingTimeTick.mockReturnValue({times: []});
    act(() => {
-    render(<Timey />, container);
+    render(<DarkModeProvider><Timey /></DarkModeProvider>, container);
    });
 
   // get a hold of the button element, and trigger some clicks on it
@@ -71,6 +72,4 @@ test('when deleting a row, leave the one before it not marked as continuation.',
   const tableRows = document.querySelectorAll(".time-log-container table tbody tr");
   expect(tableRows.values().next().done).toEqual(true);
 
-  //const tableRowsContinuations = document.querySelectorAll(".time-log-container table tbody tr.continuation");
-  //expect(tableRows.length).toEqual(0);
 });
