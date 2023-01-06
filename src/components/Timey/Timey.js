@@ -59,11 +59,9 @@ const Timey = (props) => {
         setEstCompletionTime(logic.estCompletionTime(rightNow, timeRemaining));
         const dangerRightNow = logic.inDangerZone(times, rightNow);
         if (dangerRightNow && !dangerZone) {
-            octomonk.danger();
             setDangerZone(true);
         }
         else if (!dangerRightNow) {
-            octomonk.noDanger();
             setDangerZone(false);
         }
       }
@@ -80,6 +78,16 @@ const Timey = (props) => {
     useEffect(() => {
        timeTickin();
     }, [rightNow, timeTickin])
+
+    useEffect(() => {
+        console.info("holy turds, useEffect fired and dangerZone is: " + dangerZone);
+        if (dangerZone) {
+            octomonk.danger();
+        }
+        else {
+            octomonk.noDanger();
+        }
+    }, [dangerZone]);
 
    const toggleTime = () => {
       const newState = logic.toggleWorkingState(times.slice(), working, offsetValue, timeTarget);

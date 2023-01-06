@@ -11,4 +11,7 @@
   &.off {
     background-image: url(switch-off.png);
   }
+  &:hover {
+    cursor: pointer;
+  }
 }
