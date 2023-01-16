@@ -88,6 +88,13 @@
                     cursor: pointer;
                 }
             }
+            .check-check {
+                margin-top: .5rem;
+                display: block;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
             @import "Lightswitch";
         }
 

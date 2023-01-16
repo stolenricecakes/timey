@@ -60,4 +60,9 @@ export class Octomonk {
             console.log("I done calmed octomonk down.");
         }
     }
+
+    micCheck() {
+        console.log("testes, testes, one, two, ...uh... three?");
+        this.serial.write("{\"command\":\"passed\",\"seconds\":2,\"hue\":170}");
+    }
 }

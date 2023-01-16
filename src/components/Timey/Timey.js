@@ -145,6 +145,10 @@ const Timey = (props) => {
       return /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(str);
     }
 
+    const testOcto = () => {
+       octomonk.micCheck();
+    }
+
     const getClassName = () => {
         let className = 'main-container';
         if (dangerZone) {
@@ -169,6 +173,7 @@ const Timey = (props) => {
                         <ResetButton onClick={() => resetTime()}/>
                     </div>
                     <Octobutton onClick={() => octoToggle()} currentState={octoOn ? "on" : "off"}/>
+                    <button className="check-check" onClick={testOcto}>check check</button>
                     <Lightswitch/>
                 </div>
 
