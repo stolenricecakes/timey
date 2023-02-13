@@ -44,4 +44,13 @@ describe("common time calculations", () => {
         expect(tc.calculateMinutes(40)).toEqual(0);
         expect(tc.calculateSeconds(40)).toEqual(40);
     });
+
+    test('formattedDiff returns hour, min, sec', () => {
+        const allOnes = 3661000 ;
+        expect(tc.formattedDiff(allOnes)).toEqual("01:01:01");
+    })
+
+    test('super small diff returns 0', () => {
+        expect(tc.formattedDiff(10)).toEqual("00:00:00");
+    });
 });

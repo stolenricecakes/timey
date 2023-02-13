@@ -26,7 +26,7 @@ const workingTimeTick = (rightNow, timeRemaining, estCompTime, times, offsetValu
             // have some updates to do.
             currentTime.duration = calculateDuration(currentTime.startTime, currentTime.endTime);
             currentTime.cumulativeRaw = calculateCumulative(curIdx, times, rightNow, offsetValue);
-            currentTime.cumulativeFmt = timeCalcs.formattedDiff(currentTime.cumulativeRaw / 1000);
+            currentTime.cumulativeFmt = timeCalcs.formattedDiff(currentTime.cumulativeRaw);
             doneState = checkIfDone(currentTime.cumulativeRaw, timeTarget, kaboom);
         }
 
@@ -56,7 +56,7 @@ const toggleWorkingState = (times, working, offsetValue, timeTarget ) => {
     const newState = {
         times : times,
         working : working,
-        startedContinuation : false
+        startedContinuation : false,
     }
     if (newState.times.length === 0) {
         newState.estCompletionTime = initialEstCompletion(offsetValue, timeTarget);
@@ -69,7 +69,9 @@ const toggleWorkingState = (times, working, offsetValue, timeTarget ) => {
         if (newState.times.length > 1) {
             const thisTime = newState.times[newState.times.length - 1];
             const lastTime = newState.times[newState.times.length - 2];
-
+            thisTime.duration = timeCalcs.formattedDiff(0);
+            thisTime.cumulativeRaw = calculateCumulative(newState.times.length - 1, times, thisTime.startTime, offsetValue);
+            thisTime.cumulativeFmt = timeCalcs.formattedDiff(thisTime.cumulativeRaw);
             if (thisTime.startTime.getTime() - lastTime.endTime.getTime() < (15 * 60 * 1000)) {
                 lastTime.continuation = true;
                 newState.startedContinuation = true;
@@ -85,14 +87,13 @@ const calculateDuration = (start, end) => {
         const startTime = start.getTime();
         let endTime = end.getTime();
         let diff = endTime - startTime;
-        let diffSecs = diff / 1000;
 
-        return timeCalcs.formattedDiff(diffSecs);
+        return timeCalcs.formattedDiff(diff);
     }
     else if (start) {
         const startTime = start.getTime();
         const endTime = new Date().getTime();
-        const diff = (endTime - startTime) / 1000;
+        const diff = (endTime - startTime);
 
         return timeCalcs.formattedDiff(diff);
     }

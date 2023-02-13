@@ -86,7 +86,7 @@ describe("logic used for Timey component", () => {
         ]
         const cuml = logic.calculateCumulative(0, times, rightNow);
         expect(cuml).toEqual(20000);
-        expect(tc.formattedDiff(cuml / 1000)).toEqual("00:00:20");
+        expect(tc.formattedDiff(cuml)).toEqual("00:00:20");
     });
 
     test('calculateCumulative 1 row completed', () => {
@@ -98,7 +98,7 @@ describe("logic used for Timey component", () => {
         ]
         const cuml = logic.calculateCumulative(0, times);
         expect(cuml).toEqual(20000);
-        expect(tc.formattedDiff(cuml / 1000)).toEqual("00:00:20");
+        expect(tc.formattedDiff(cuml)).toEqual("00:00:20");
     });
 
     test('calculateCumulative 1st continuation, 2nd is in progress', () => {
@@ -115,7 +115,7 @@ describe("logic used for Timey component", () => {
         //expect(tl.calculateCumulative(0, times)).toEqual("00:00:20");
         const cuml = logic.calculateCumulative(1, times, rightNow);
         expect(cuml).toEqual(1120000);
-        expect(tc.formattedDiff(cuml / 1000)).toEqual("00:18:40");
+        expect(tc.formattedDiff(cuml)).toEqual("00:18:40");
     });
 
     test('calculateCumulative 1st continuation, 2nd completed', () => {
@@ -132,11 +132,11 @@ describe("logic used for Timey component", () => {
         // == 1120 secs.
         const cuml1 = logic.calculateCumulative(0, times);
         expect(cuml1).toEqual(20000);
-        expect(tc.formattedDiff(cuml1 / 1000)).toEqual("00:00:20");
+        expect(tc.formattedDiff(cuml1)).toEqual("00:00:20");
 
         const cuml2 = logic.calculateCumulative(1, times);
         expect(cuml2).toEqual(1120000);
-        expect(tc.formattedDiff(cuml2 / 1000)).toEqual("00:18:40");
+        expect(tc.formattedDiff(cuml2)).toEqual("00:18:40");
     });
 
     test('calculateCumulative 1st complete (not continuation), 2nd completed', () => {
@@ -153,11 +153,11 @@ describe("logic used for Timey component", () => {
         // == 1120 secs.
         const cuml1 = logic.calculateCumulative(0, times);
         expect(cuml1).toEqual(20000);
-        expect(tc.formattedDiff(cuml1 / 1000)).toEqual("00:00:20");
+        expect(tc.formattedDiff(cuml1)).toEqual("00:00:20");
 
         const cuml2 = logic.calculateCumulative(1, times);
         expect(cuml2).toEqual(1020000);
-        expect(tc.formattedDiff(cuml2 / 1000)).toEqual("00:17:00");
+        expect(tc.formattedDiff(cuml2)).toEqual("00:17:00");
     });
 
     test('calculateCumulative with an offset 1st complete (not continuation), 2nd completed', () => {
@@ -174,11 +174,11 @@ describe("logic used for Timey component", () => {
 
         const cuml1 = logic.calculateCumulative(0, times, null, offsetValue);
         expect(cuml1).toEqual(4220000);
-        expect(tc.formattedDiff(cuml1 / 1000)).toEqual("01:10:20");
+        expect(tc.formattedDiff(cuml1)).toEqual("01:10:20");
 
         const cuml2 = logic.calculateCumulative(1, times, null, offsetValue);
         expect(cuml2).toEqual(5220000);
-        expect(tc.formattedDiff(cuml2 / 1000)).toEqual("01:27:00");
+        expect(tc.formattedDiff(cuml2)).toEqual("01:27:00");
     });
 
 
@@ -197,13 +197,13 @@ describe("logic used for Timey component", () => {
     test('calculateRemainingTime nothing worked, 10 minute target', () => {
         const remainingTimeMs = logic.calculateRemainingTime(0, "00:10");
         expect(remainingTimeMs).toEqual(600000);
-        expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:10:00");
+        expect(tc.formattedDiff(remainingTimeMs)).toEqual("00:10:00");
     });
 
     test('calculateRemainingTime 10 min worked, 10 minute target', () => {
         const remainingTimeMs = logic.calculateRemainingTime(600000, "00:10");
         expect(remainingTimeMs).toEqual(0);
-        expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:00:00");
+        expect(tc.formattedDiff(remainingTimeMs)).toEqual("00:00:00");
     });
 
     test('calculateRemainingTime 20 min worked, 10 minute target', () => {
@@ -218,13 +218,13 @@ describe("logic used for Timey component", () => {
     test('calculateRemainingTime 1 hour worked, 1 hour target', () => {
         const remainingTimeMs = logic.calculateRemainingTime(3600000, "01:00");
         expect(remainingTimeMs).toEqual(0);
-        expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:00:00");
+        expect(tc.formattedDiff(remainingTimeMs)).toEqual("00:00:00");
     });
 
     test('calculateRemainingTime 1 hour worked, 1 hour, 1 minute target', () => {
         const remainingTimeMs = logic.calculateRemainingTime(3600000, "01:01");
         expect(remainingTimeMs).toEqual(60000);
-        expect(tc.formattedDiff(remainingTimeMs / 1000)).toEqual("00:01:00");
+        expect(tc.formattedDiff(remainingTimeMs)).toEqual("00:01:00");
     });
 
 
@@ -329,5 +329,37 @@ describe("logic used for Timey component", () => {
         const result = logic.inDangerZone(times, rightNow);
 
         expect(result).toEqual(false);
+    });
+
+    test('toggleWorkingState no times, should calc initial est and make new time', () => {
+        const rightNow = new Date();
+        const result = logic.toggleWorkingState([], false, "00:00", "08:00");
+        expect(result.estCompletionTime).toBeTruthy();
+        expect(result.times.length).toEqual(1);
+        result.times[0].startTime = parseInt(result.times[0].startTime.getTime() / 1000);
+        expect(result.times[0]).toEqual({startTime: parseInt(rightNow.getTime() / 1000), continuation: false});
+    });
+
+    test('toggleWorkingState one existing time, should calc cumulative and duration for non-continuation', () => {
+        const rightNow = new Date();
+        const twentyminutesAgo = rightNow.getTime() - (1000 * 60 * 20);
+        const prevTimes = [{startTime: new Date(twentyminutesAgo - 1), endTime: new Date(twentyminutesAgo), continuation: false}]
+        const result = logic.toggleWorkingState(prevTimes, false, "00:00", "08:00");
+        expect(result.estCompletionTime).toBeFalsy();
+        expect(result.times.length).toEqual(2);
+        result.times[1].startTime = parseInt(result.times[1].startTime.getTime() / 1000);
+        expect(result.times[1]).toEqual({startTime: parseInt(rightNow.getTime() / 1000), continuation: false, duration: "00:00:00", cumulativeRaw: 1, cumulativeFmt: "00:00:00"});
+    });
+
+    test('toggleWorkingState one existing time, should calc cumulative and duration for continuation', () => {
+        const rightNow = new Date();
+        const fourteenminutesAgo = rightNow.getTime() - (1000 * 60 * 14);
+        const prevTimes = [{endTime: new Date(fourteenminutesAgo), startTime: new Date(fourteenminutesAgo - 200000), continuation: false}]
+        const result = logic.toggleWorkingState(prevTimes, false, "00:00", "08:00");
+        expect(result.estCompletionTime).toBeFalsy();
+        expect(result.times.length).toEqual(2);
+        expect(result.times[0].continuation).toEqual(true);
+        result.times[1].startTime = parseInt(result.times[1].startTime.getTime() / 1000);
+        expect(result.times[1]).toEqual({startTime: parseInt(rightNow.getTime() / 1000), continuation: false, duration: "00:00:00", cumulativeRaw: 200000, cumulativeFmt: "00:03:20"});
     });
 });

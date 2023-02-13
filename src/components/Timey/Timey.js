@@ -107,7 +107,7 @@ const Timey = (props) => {
 
     const resetTime = () => {
       if (overage) {
-         const hhmmssOverageAry = timeCalcs.formattedDiff(overage / -1000).split(":");
+         const hhmmssOverageAry = timeCalcs.formattedDiff(overage / -1).split(":");
          offsetChanged(hhmmssOverageAry[0] + ":" + hhmmssOverageAry[1]);
          setOffsetRefresher(offsetRefresher + 1);
       }
@@ -183,12 +183,12 @@ const Timey = (props) => {
 
                     {(times.length > 0) && (
                         <div className="remaining-times-container">
-                            <TimeDisplayField label="Time Remaining" time={timeCalcs.formattedDiff(timeRemaining / 1000)} />
+                            <TimeDisplayField label="Time Remaining" time={timeCalcs.formattedDiff(timeRemaining)} />
 
                             <TimeDisplayField label="Estimated Completion Time" time={estCompletionTime} />
 
                             {overage && (
-                                <TimeDisplayField label="Overage" time={timeCalcs.formattedDiff(overage / -1000)} />
+                                <TimeDisplayField label="Overage" time={timeCalcs.formattedDiff(overage / -1)} />
                             )}
                         </div>
                     )}

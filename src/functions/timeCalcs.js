@@ -11,9 +11,10 @@ const formatTime = (date) => {
 
 
 const formattedDiff = (diff) => {
-    const hours = padNumber(calculateHours(diff));
-    const mins = padNumber(calculateMinutes(diff));
-    const secs = padNumber(calculateSeconds(diff));
+    const diffSecs = Math.floor(diff / 1000);
+    const hours = padNumber(calculateHours(diffSecs));
+    const mins = padNumber(calculateMinutes(diffSecs));
+    const secs = padNumber(calculateSeconds(diffSecs));
 
     return hours + ":" + mins + ":" + secs;
 };
