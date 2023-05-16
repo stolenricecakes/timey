@@ -179,4 +179,17 @@ const inDangerZone = (times, rightNow) => {
    }
 };
 
-export { initialEstCompletion, deleteEntry, workingTimeTick, toggleWorkingState,  calculateDuration, calculateCumulative, calculateRemainingTime, estCompletionTime, inDangerZone};
+// assumed this will only be called when not working.
+const exceededDangerZone = (times, rightNow) => {
+    if (times && times.length > 0) {
+        const lastTime = times[times.length - 1];
+        const diff = rightNow.getTime() - lastTime.endTime.getTime();
+        const fifteenMinutesMs = 15 * 60 * 1000;
+        return diff > fifteenMinutesMs;
+    }
+    else {
+        return false;
+    }
+};
+
+export { initialEstCompletion, deleteEntry, workingTimeTick, toggleWorkingState,  calculateDuration, calculateCumulative, calculateRemainingTime, estCompletionTime, inDangerZone, exceededDangerZone};

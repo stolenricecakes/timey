@@ -362,4 +362,47 @@ describe("logic used for Timey component", () => {
         result.times[1].startTime = parseInt(result.times[1].startTime.getTime() / 1000);
         expect(result.times[1]).toEqual({startTime: parseInt(rightNow.getTime() / 1000), continuation: false, duration: "00:00:00", cumulativeRaw: 200000, cumulativeFmt: "00:03:20"});
     });
+
+    test('exceededDangerZone is false if there are no times yet', () => {
+        const result = logic.exceededDangerZone([], new Date());
+        expect(result).toEqual(false);
+    });
+
+    test('exceededDangerZone is false if stop is 1 minute ago', () => {
+        const rightNow = new Date();
+        const times = [{
+           startTime : new Date(rightNow.getTime() - 120000),
+           endTime : new Date(rightNow.getTime() - 60000),
+           continuation : false
+        }];
+        const result = logic.exceededDangerZone(times, rightNow);
+
+        expect(result).toEqual(false);
+    });
+
+    test('exceededDangerZone is false if stop is 14 minutes ago', () => {
+        const rightNow = new Date();
+        const times = [{
+           startTime : new Date(rightNow.getTime() - 12000000),
+           endTime : new Date(rightNow.getTime() - 14*60000),
+           continuation : false
+        }];
+        const result = logic.exceededDangerZone(times, rightNow);
+
+        expect(result).toEqual(false);
+    });
+
+    test('exceededDangerZone is true if stop is 15 minutes ago', () => {
+        const rightNow = new Date();
+        const times = [{
+           startTime : new Date(rightNow.getTime() - 12000000),
+           endTime : new Date(rightNow.getTime() - (15*60000 + 1)),
+           continuation : false
+        }];
+        const result = logic.exceededDangerZone(times, rightNow);
+
+        expect(result).toEqual(true);
+    });
+
+
 });

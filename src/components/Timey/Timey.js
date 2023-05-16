@@ -29,6 +29,7 @@ const Timey = (props) => {
     const [overage, setOverage] = useState();
     const [octoOn, setOctoOn] = useState(false);
     const [dangerZone, setDangerZone] = useState(false);
+    const [exceededDanger, setExceededDanger] = useState(false);
     const { darkMode } = useContext(DarkModeContext);
 
     const octoToggle = () => {
@@ -54,6 +55,7 @@ const Timey = (props) => {
         setTimes(stateUpdates.times);
         setOverage(stateUpdates.overage);
         setDangerZone(false);
+        setExceededDanger(false);
       }
       else if (!kaboom) {
         setEstCompletionTime(logic.estCompletionTime(rightNow, timeRemaining));
@@ -63,6 +65,9 @@ const Timey = (props) => {
         }
         else if (!dangerRightNow) {
             setDangerZone(false);
+        }
+        if (logic.exceededDangerZone(times, rightNow)) {
+            setExceededDanger(true);
         }
       }
     },[working, rightNow, timeRemaining, estCompletionTime, times, offsetValue, timeTarget, kaboom, dangerZone]);
@@ -154,8 +159,11 @@ const Timey = (props) => {
         if (dangerZone) {
             className += " alert";
         }
+        if (exceededDanger) {
+            className +=  " danger-ignored";
+        }
         if (darkMode) {
-            className += " dark-mode"
+            className += " dark-mode";
         }
         return className;
     }
@@ -191,6 +199,9 @@ const Timey = (props) => {
                                 <TimeDisplayField label="Overage" time={timeCalcs.formattedDiff(overage / -1)} />
                             )}
                         </div>
+                    )}
+                    {exceededDanger && (
+                        <div className="danger-exceeded">FARTS! you took too long.</div>
                     )}
                 </div>
             </div>
