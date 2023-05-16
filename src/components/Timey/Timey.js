@@ -159,8 +159,11 @@ const Timey = (props) => {
         if (dangerZone) {
             className += " alert";
         }
+        if (exceededDanger) {
+            className +=  " danger-ignored";
+        }
         if (darkMode) {
-            className += " dark-mode"
+            className += " dark-mode";
         }
         return className;
     }

@@ -6,3 +6,13 @@
   }
   100% { background-color: white; }
 }
+
+$sad_normal: rgba(240, 10, 10, .9);
+$sad_highlight: rgba(240, 50, 50, .8);
+@keyframes sadness {
+  0% { background-color: $sad_normal;}
+  40% { background-color: $sad_normal;}
+  50% { background-color: $sad_highlight;}
+  60% { background-color: $sad_normal;}
+  100% { background-color: $sad_normal;}
+}
