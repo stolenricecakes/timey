@@ -80,12 +80,37 @@ const Timey = (props) => {
        return () => clearInterval(interval);
     }, []);
 
+    const dateTimeinator = (key, value) => {
+       const datey =  /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
+       if (typeof value === 'string' && datey.test(value)) {
+          return new Date(value);
+       }
+       else {
+        return value;
+       }
+    }
+
+    useEffect(() => {
+       const lsTimes = localStorage.getItem("times");
+       if (lsTimes) {
+        setTimes(JSON.parse(lsTimes, dateTimeinator));
+       }
+       const lsWorking = localStorage.getItem("working");
+       if (lsWorking) {
+        setWorking(JSON.parse(lsWorking));
+       }
+       const lsOffset = localStorage.getItem("offset");
+       if (lsOffset) {
+         setOffsetValue(JSON.parse(lsOffset));
+         setOffsetRefresher(of => of + 1);
+       }
+    }, []);
+
     useEffect(() => {
        timeTickin();
     }, [rightNow, timeTickin])
 
     useEffect(() => {
-        console.info("holy turds, useEffect fired and dangerZone is: " + dangerZone);
         if (dangerZone) {
             octomonk.danger();
         }
@@ -105,18 +130,31 @@ const Timey = (props) => {
 
       setWorking(newState.working);
       setTimes(newState.times);
+      saveLs("working", newState.working)
+      saveLs("times", newState.times)
       if (newState.estCompletionTime) {
           setEstCompletionTime(newState.estCompletionTime);
       }
     }
 
+    const saveLs = (key, val) => {
+        localStorage.setItem(key, JSON.stringify(val));
+    }
+
     const resetTime = () => {
       if (overage) {
          const hhmmssOverageAry = timeCalcs.formattedDiff(overage / -1).split(":");
-         offsetChanged(hhmmssOverageAry[0] + ":" + hhmmssOverageAry[1]);
+         const offsetStr = `${hhmmssOverageAry[0]}:${hhmmssOverageAry[1]}`;
+         offsetChanged(offsetStr);
          setOffsetRefresher(offsetRefresher + 1);
+         saveLs("offset", offsetStr);
+      }
+      else {
+        saveLs("offset", "00:00");
       }
       setTimes([]);
+      saveLs("times", []);
+      saveLs("working", false);
       setWorking(false);
       setKaboom(false);
       setEstCompletionTime("");
