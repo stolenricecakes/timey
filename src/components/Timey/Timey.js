@@ -142,16 +142,13 @@ const Timey = (props) => {
     }
 
     const resetTime = () => {
-      if (overage) {
-         const hhmmssOverageAry = timeCalcs.formattedDiff(overage / -1).split(":");
-         const offsetStr = `${hhmmssOverageAry[0]}:${hhmmssOverageAry[1]}`;
-         offsetChanged(offsetStr);
-         setOffsetRefresher(offsetRefresher + 1);
-         saveLs("offset", offsetStr);
-      }
-      else {
-        saveLs("offset", "00:00");
-      }
+
+      const hhmmssOverageAry = overage ? timeCalcs.formattedDiff(overage / -1).split(":") : ["00", "00"];
+      const offsetStr = `${hhmmssOverageAry[0]}:${hhmmssOverageAry[1]}`;
+      offsetChanged(offsetStr);
+      setOffsetRefresher(offsetRefresher + 1);
+      saveLs("offset", offsetStr);
+
       setTimes([]);
       saveLs("times", []);
       saveLs("working", false);
