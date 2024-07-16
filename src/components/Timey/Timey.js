@@ -205,7 +205,10 @@ const Timey = (props) => {
 
     return (
         <div className={getClassName()}>
-            <div className="banner">Howdy!  record your time here and stuff</div>
+            <div className="top-container">
+                <div className="banner">Howdy!  record your time here and stuff:</div>
+                <div className="time">{rightNow.toLocaleString()}</div>
+            </div>
             <div className="app-container">
 
                 <div className="time-log-container">

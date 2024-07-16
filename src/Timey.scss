@@ -22,8 +22,18 @@
         animation-iteration-count: infinite;
     }
 
-    .banner {
-        font-size: 1.3rem;
+    .top-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .banner {
+            font-size: 1.3rem;
+        }
+        .time {
+            align-self: flex-start;
+            font-size: .8rem;
+            margin-right: 3rem;
+        }
     }
 
     button {
